@@ -10,7 +10,8 @@ import Foundation
 import WebKit
 
 protocol JSOperationLoaderDelegate: class {
-    func didCompleteLoadingOperation(for title: String)
+    func didCompleteLoadingOperation(for title: String, progress: Int, state: String)
+    func didEncounterError(for title: String, state: ResponseMessageViewModel.State)
 }
 
 class JSOperationLoader: NSObject {
@@ -23,13 +24,13 @@ class JSOperationLoader: NSObject {
     
     weak var delegate: JSOperationLoaderDelegate?
     var webView: WKWebView!
-    let responseViewModel: ResponseMessageViewModel
+    let id: String
         
     
     // MARK: - Initializer
     
-    init(responseViewModel: ResponseMessageViewModel) {
-        self.responseViewModel = responseViewModel
+    init(id: String) {
+        self.id = id
         super.init()
         setupWebView()
     }
@@ -60,11 +61,9 @@ class JSOperationLoader: NSObject {
     // MARK: - Helper Methods
     
     private func evaluateJavascript() {
-        webView.evaluateJavaScript("startOperation('\(responseViewModel.id)')") { (_, err) in
-            if let err = err {
-                print(err.localizedDescription)
-                self.responseViewModel.state = .error
-                self.delegate?.didCompleteLoadingOperation(for: self.responseViewModel.id)
+        webView.evaluateJavaScript("startOperation('\(id)')") { (_, err) in
+            if let _ = err {
+                self.delegate?.didEncounterError(for: self.id, state: .error)
             }
         }
     }
@@ -85,12 +84,11 @@ extension JSOperationLoader: WKScriptMessageHandler {
                 let responseProgress = json?["progress"] as? Int ?? 0
                 let responseState = json?["state"] as? String ?? ""
                 
-                self.responseViewModel.handleStateChanges(state: responseState, progress: responseProgress)
-                self.delegate?.didCompleteLoadingOperation(for: self.responseViewModel.id)
+                self.delegate?.didCompleteLoadingOperation(for: self.id,
+                                                           progress: responseProgress, state: responseState)
             }
         } else {
-            responseViewModel.state = .error
-            self.delegate?.didCompleteLoadingOperation(for: self.responseViewModel.id)
+            self.delegate?.didEncounterError(for: id, state: .error)
         }
     }
 }
