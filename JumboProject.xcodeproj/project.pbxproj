@@ -13,8 +13,10 @@
 		3D518BE323BF85180032B268 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3D518BE223BF85180032B268 /* Assets.xcassets */; };
 		3D518BE623BF85180032B268 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3D518BE523BF85180032B268 /* Preview Assets.xcassets */; };
 		3D518BE923BF85180032B268 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3D518BE723BF85180032B268 /* LaunchScreen.storyboard */; };
-		3D518BF423BF85180032B268 /* JumboProjectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D518BF323BF85180032B268 /* JumboProjectTests.swift */; };
+		3D518BF423BF85180032B268 /* ResponseMessageViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D518BF323BF85180032B268 /* ResponseMessageViewModelTests.swift */; };
 		3D518C0523BF86E30032B268 /* ResponseMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D518C0423BF86E30032B268 /* ResponseMessage.swift */; };
+		3D518C0723BF87A30032B268 /* JSOperationLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D518C0623BF87A30032B268 /* JSOperationLoader.swift */; };
+		3D518C0923BF87BD0032B268 /* ResponseMessageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D518C0823BF87BD0032B268 /* ResponseMessageViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,9 +39,11 @@
 		3D518BE823BF85180032B268 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3D518BEA23BF85180032B268 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3D518BEF23BF85180032B268 /* JumboProjectTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JumboProjectTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		3D518BF323BF85180032B268 /* JumboProjectTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumboProjectTests.swift; sourceTree = "<group>"; };
+		3D518BF323BF85180032B268 /* ResponseMessageViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseMessageViewModelTests.swift; sourceTree = "<group>"; };
 		3D518BF523BF85180032B268 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3D518C0423BF86E30032B268 /* ResponseMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseMessage.swift; sourceTree = "<group>"; };
+		3D518C0623BF87A30032B268 /* JSOperationLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSOperationLoader.swift; sourceTree = "<group>"; };
+		3D518C0823BF87BD0032B268 /* ResponseMessageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseMessageViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,11 +86,11 @@
 			isa = PBXGroup;
 			children = (
 				3D518BFE23BF859D0032B268 /* Supporting Files */,
-				3D518C0323BF85EA0032B268 /* ViewModels */,
 				3D518C0223BF85E50032B268 /* Views */,
 				3D518C0123BF85E20032B268 /* Models */,
 				3D518C0023BF85DC0032B268 /* Loaders */,
 				3D518BFF23BF85A50032B268 /* Controllers */,
+				3D518C0323BF85EA0032B268 /* ViewModels */,
 				3D518BE223BF85180032B268 /* Assets.xcassets */,
 				3D518BEA23BF85180032B268 /* Info.plist */,
 				3D518BE423BF85180032B268 /* Preview Content */,
@@ -105,7 +109,7 @@
 		3D518BF223BF85180032B268 /* JumboProjectTests */ = {
 			isa = PBXGroup;
 			children = (
-				3D518BF323BF85180032B268 /* JumboProjectTests.swift */,
+				3D518C0A23BF88510032B268 /* ViewModels */,
 				3D518BF523BF85180032B268 /* Info.plist */,
 			);
 			path = JumboProjectTests;
@@ -132,6 +136,7 @@
 		3D518C0023BF85DC0032B268 /* Loaders */ = {
 			isa = PBXGroup;
 			children = (
+				3D518C0623BF87A30032B268 /* JSOperationLoader.swift */,
 			);
 			path = Loaders;
 			sourceTree = "<group>";
@@ -154,6 +159,15 @@
 		3D518C0323BF85EA0032B268 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				3D518C0823BF87BD0032B268 /* ResponseMessageViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		3D518C0A23BF88510032B268 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				3D518BF323BF85180032B268 /* ResponseMessageViewModelTests.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -260,6 +274,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D518C0523BF86E30032B268 /* ResponseMessage.swift in Sources */,
+				3D518C0923BF87BD0032B268 /* ResponseMessageViewModel.swift in Sources */,
+				3D518C0723BF87A30032B268 /* JSOperationLoader.swift in Sources */,
 				3D518BDD23BF85150032B268 /* AppDelegate.swift in Sources */,
 				3D518BDF23BF85150032B268 /* SceneDelegate.swift in Sources */,
 				3D518BE123BF85150032B268 /* ViewController.swift in Sources */,
@@ -270,7 +286,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3D518BF423BF85180032B268 /* JumboProjectTests.swift in Sources */,
+				3D518BF423BF85180032B268 /* ResponseMessageViewModelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
