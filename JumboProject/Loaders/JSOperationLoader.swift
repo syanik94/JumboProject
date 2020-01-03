@@ -17,9 +17,12 @@ class JSOperationLoader: NSObject {
     
     // MARK: - Dependencies
     
+    var webView: WKWebView!
+
+    
     let responseViewModel: ResponseMessageViewModel
     
-    var webView: WKWebView!
+    var completion: (() -> Void)?
     
     
     // MARK: - Initializer
@@ -27,6 +30,13 @@ class JSOperationLoader: NSObject {
     init(responseViewModel: ResponseMessageViewModel) {
         self.responseViewModel = responseViewModel
         super.init()
+        setupWebView()
+    }
+    
+    
+    // MARK: - Setup
+    
+    fileprivate func setupWebView() {
         let config = WKWebViewConfiguration()
         let userContentController = WKUserContentController()
         let userScript = WKUserScript(source: JSOperationLoader.loadJavascriptContents(), injectionTime: .atDocumentEnd, forMainFrameOnly: true)
@@ -37,7 +47,6 @@ class JSOperationLoader: NSObject {
         webView.navigationDelegate = self
     }
     
-    
     // MARK: - API Methods
     
     func load() {
@@ -46,14 +55,15 @@ class JSOperationLoader: NSObject {
         webView.load(request)
     }
     
+    
+    // MARK: - Helper Methods
+    
     private func evaluateJavascript() {
-        webView.evaluateJavaScript("startOperation('\(responseViewModel.id)')") { (result, err) in
+        webView.evaluateJavaScript("startOperation('\(responseViewModel.id)')") { (_, err) in
             if let err = err {
                 print(err.localizedDescription)
                 self.responseViewModel.state = .error
-            }
-            if let result = result {
-                print(result)
+                self.completion?()
             }
         }
     }
@@ -73,8 +83,13 @@ extension JSOperationLoader: WKScriptMessageHandler {
                 let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
                 let responseProgress = json?["progress"] as? Int ?? 0
                 let responseState = json?["state"] as? String ?? ""
+                
                 self.responseViewModel.handleStateChanges(state: responseState, progress: responseProgress)
+                completion?()
             }
+        } else {
+            responseViewModel.state = .error
+            completion?()
         }
     }
 }
