@@ -31,20 +31,20 @@ class ResponseMessageViewModelTests: XCTestCase {
     func testLoadingState() {
         let expectedOutput = ResponseMessageViewModel.State.loading
         
-        sut!.handleStateChanges(state: "", progress: 11)
+        sut!.handleStateChanges(state: "", progress: 20)
         
         XCTAssertEqual(sut!.state, expectedOutput)
-        XCTAssertEqual(sut!.progress, 11)
+        XCTAssertEqual(sut!.progress.completedUnitCount, 20)
         
         sut!.handleStateChanges(state: "", progress: 72)
 
         XCTAssertEqual(sut!.state, expectedOutput)
-        XCTAssertEqual(sut!.progress, 72)
-        
+        XCTAssertEqual(sut!.progress.completedUnitCount, 72)
+
         sut!.handleStateChanges(state: "", progress: 95)
 
         XCTAssertEqual(sut!.state, expectedOutput)
-        XCTAssertEqual(sut!.progress, 95)
+        XCTAssertEqual(sut!.progress.completedUnitCount, 95)
     }
     
     func testSuccess() {
@@ -53,7 +53,7 @@ class ResponseMessageViewModelTests: XCTestCase {
         sut!.handleStateChanges(state: "success", progress: 95)
         
         XCTAssertEqual(sut!.state, expectedOutput)
-        XCTAssertEqual(sut!.progress, 100)
+        XCTAssertEqual(sut!.progress.completedUnitCount, 100)
     }
 
     func testError() {
@@ -62,7 +62,16 @@ class ResponseMessageViewModelTests: XCTestCase {
         sut!.handleStateChanges(state: "error", progress: 95)
         
         XCTAssertEqual(sut!.state, expectedOutput)
-        XCTAssertEqual(sut!.progress, 95)
+        XCTAssertEqual(sut!.progress.fractionCompleted, 0.95)
+    }
+    
+    func testErrorWithInvalidStateText() {
+        let expectedOutput = ResponseMessageViewModel.State.error
+        
+        sut!.handleStateChanges(state: "err", progress: 11)
+        
+        XCTAssertEqual(sut!.state, expectedOutput)
+        XCTAssertEqual(sut!.progress.fractionCompleted, 0.11)
     }
     
     // MARK: - Helpers
