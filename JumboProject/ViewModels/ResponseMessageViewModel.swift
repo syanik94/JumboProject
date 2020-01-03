@@ -18,7 +18,7 @@ class ResponseMessageViewModel {
     }
     
     let id: String
-    var progress: Int?
+    let progress = Progress(totalUnitCount: 100)
     var state: State = .pending
     
 
@@ -27,11 +27,10 @@ class ResponseMessageViewModel {
         self.state = .loading
     }
     
-    
     func handleStateChanges(state: String, progress: Int) {
-        if progress != 0 { self.progress = progress }
+        if progress != 0 { self.progress.completedUnitCount = Int64(progress) }
         self.state = state.isEmpty ? self.state: State(rawValue: state) ?? .error
-        if self.state == .success { self.progress = 100 }
+        if self.state == .success { self.progress.completedUnitCount = Int64(100) }
     }
 }
 
