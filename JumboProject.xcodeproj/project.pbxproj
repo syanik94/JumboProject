@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		3D518BDD23BF85150032B268 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D518BDC23BF85150032B268 /* AppDelegate.swift */; };
 		3D518BDF23BF85150032B268 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D518BDE23BF85150032B268 /* SceneDelegate.swift */; };
-		3D518BE123BF85150032B268 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D518BE023BF85150032B268 /* ContentView.swift */; };
+		3D518BE123BF85150032B268 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D518BE023BF85150032B268 /* ViewController.swift */; };
 		3D518BE323BF85180032B268 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3D518BE223BF85180032B268 /* Assets.xcassets */; };
 		3D518BE623BF85180032B268 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3D518BE523BF85180032B268 /* Preview Assets.xcassets */; };
 		3D518BE923BF85180032B268 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3D518BE723BF85180032B268 /* LaunchScreen.storyboard */; };
@@ -30,7 +30,7 @@
 		3D518BD923BF85150032B268 /* JumboProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JumboProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D518BDC23BF85150032B268 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3D518BDE23BF85150032B268 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		3D518BE023BF85150032B268 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		3D518BE023BF85150032B268 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		3D518BE223BF85180032B268 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3D518BE523BF85180032B268 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		3D518BE823BF85180032B268 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -79,11 +79,13 @@
 		3D518BDB23BF85150032B268 /* JumboProject */ = {
 			isa = PBXGroup;
 			children = (
-				3D518BDC23BF85150032B268 /* AppDelegate.swift */,
-				3D518BDE23BF85150032B268 /* SceneDelegate.swift */,
-				3D518BE023BF85150032B268 /* ContentView.swift */,
+				3D518BFE23BF859D0032B268 /* Supporting Files */,
+				3D518C0323BF85EA0032B268 /* ViewModels */,
+				3D518C0223BF85E50032B268 /* Views */,
+				3D518C0123BF85E20032B268 /* Models */,
+				3D518C0023BF85DC0032B268 /* Loaders */,
+				3D518BFF23BF85A50032B268 /* Controllers */,
 				3D518BE223BF85180032B268 /* Assets.xcassets */,
-				3D518BE723BF85180032B268 /* LaunchScreen.storyboard */,
 				3D518BEA23BF85180032B268 /* Info.plist */,
 				3D518BE423BF85180032B268 /* Preview Content */,
 			);
@@ -105,6 +107,52 @@
 				3D518BF523BF85180032B268 /* Info.plist */,
 			);
 			path = JumboProjectTests;
+			sourceTree = "<group>";
+		};
+		3D518BFE23BF859D0032B268 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				3D518BE723BF85180032B268 /* LaunchScreen.storyboard */,
+				3D518BDC23BF85150032B268 /* AppDelegate.swift */,
+				3D518BDE23BF85150032B268 /* SceneDelegate.swift */,
+			);
+			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		3D518BFF23BF85A50032B268 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				3D518BE023BF85150032B268 /* ViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		3D518C0023BF85DC0032B268 /* Loaders */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Loaders;
+			sourceTree = "<group>";
+		};
+		3D518C0123BF85E20032B268 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		3D518C0223BF85E50032B268 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		3D518C0323BF85EA0032B268 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -210,7 +258,7 @@
 			files = (
 				3D518BDD23BF85150032B268 /* AppDelegate.swift in Sources */,
 				3D518BDF23BF85150032B268 /* SceneDelegate.swift in Sources */,
-				3D518BE123BF85150032B268 /* ContentView.swift in Sources */,
+				3D518BE123BF85150032B268 /* ViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
