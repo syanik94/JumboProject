@@ -14,6 +14,7 @@
 		3D518BE623BF85180032B268 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3D518BE523BF85180032B268 /* Preview Assets.xcassets */; };
 		3D518BE923BF85180032B268 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3D518BE723BF85180032B268 /* LaunchScreen.storyboard */; };
 		3D518BF423BF85180032B268 /* JumboProjectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D518BF323BF85180032B268 /* JumboProjectTests.swift */; };
+		3D518C0523BF86E30032B268 /* ResponseMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D518C0423BF86E30032B268 /* ResponseMessage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,6 +39,7 @@
 		3D518BEF23BF85180032B268 /* JumboProjectTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JumboProjectTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D518BF323BF85180032B268 /* JumboProjectTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumboProjectTests.swift; sourceTree = "<group>"; };
 		3D518BF523BF85180032B268 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3D518C0423BF86E30032B268 /* ResponseMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseMessage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -137,6 +139,7 @@
 		3D518C0123BF85E20032B268 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				3D518C0423BF86E30032B268 /* ResponseMessage.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -256,6 +259,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3D518C0523BF86E30032B268 /* ResponseMessage.swift in Sources */,
 				3D518BDD23BF85150032B268 /* AppDelegate.swift in Sources */,
 				3D518BDF23BF85150032B268 /* SceneDelegate.swift in Sources */,
 				3D518BE123BF85150032B268 /* ViewController.swift in Sources */,
