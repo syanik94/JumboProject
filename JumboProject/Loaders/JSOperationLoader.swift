@@ -9,6 +9,10 @@
 import Foundation
 import WebKit
 
+protocol JSOperationLoaderDelegate: class {
+    func didCompleteLoadingOperation(for title: String)
+}
+
 class JSOperationLoader: NSObject {
     
     enum Constant {
@@ -17,13 +21,10 @@ class JSOperationLoader: NSObject {
     
     // MARK: - Dependencies
     
+    weak var delegate: JSOperationLoaderDelegate?
     var webView: WKWebView!
-
-    
     let responseViewModel: ResponseMessageViewModel
-    
-    var completion: (() -> Void)?
-    
+        
     
     // MARK: - Initializer
     
@@ -63,7 +64,7 @@ class JSOperationLoader: NSObject {
             if let err = err {
                 print(err.localizedDescription)
                 self.responseViewModel.state = .error
-                self.completion?()
+                self.delegate?.didCompleteLoadingOperation(for: self.responseViewModel.id)
             }
         }
     }
@@ -85,11 +86,11 @@ extension JSOperationLoader: WKScriptMessageHandler {
                 let responseState = json?["state"] as? String ?? ""
                 
                 self.responseViewModel.handleStateChanges(state: responseState, progress: responseProgress)
-                completion?()
+                self.delegate?.didCompleteLoadingOperation(for: self.responseViewModel.id)
             }
         } else {
             responseViewModel.state = .error
-            completion?()
+            self.delegate?.didCompleteLoadingOperation(for: self.responseViewModel.id)
         }
     }
 }

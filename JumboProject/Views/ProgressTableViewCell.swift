@@ -16,9 +16,9 @@ final class ProgressTableViewCell: UITableViewCell {
             
             switch viewModel.state {
             case .error:
-                setErrorState()
+                handleErrorState()
             case .success:
-                setSuccessState()
+                handleSuccessState()
             default:
                 progressLabel.text = "Loading..."
                 let currentProgress = viewModel.progress.fractionCompleted
@@ -49,7 +49,7 @@ final class ProgressTableViewCell: UITableViewCell {
         return stackView
     }()
     
-    
+    // MARK: - Initializer
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -61,6 +61,8 @@ final class ProgressTableViewCell: UITableViewCell {
         super.init(coder: coder)
     }
     
+    
+    // MARK: - View Setup
     
     fileprivate func setupContentView() {
         addSubview(contentStackView)
@@ -79,13 +81,16 @@ final class ProgressTableViewCell: UITableViewCell {
         progressView.subviews[1].clipsToBounds = true
     }
     
-    fileprivate func setSuccessState() {
+    
+    // MARK: - State Handlers
+    
+    fileprivate func handleSuccessState() {
         progressLabel.text = "Success!"
         progressView.setProgress(1, animated: false)
         progressView.progressTintColor = .systemGreen
         
         UIView.animate(withDuration: 0.3, animations: {
-            self.progressView.transform = CGAffineTransform(scaleX: 1.05, y: 1.05)
+            self.progressView.transform = CGAffineTransform(scaleX: 1.03, y: 1.03)
         }) { (_) in
             UIView.animate(withDuration: 0.2, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
                 self.progressView.transform = .identity
@@ -93,7 +98,7 @@ final class ProgressTableViewCell: UITableViewCell {
         }
     }
     
-    fileprivate func setErrorState() {
+    fileprivate func handleErrorState() {
         progressLabel.text = "Error!"
         progressView.progressTintColor = .systemRed
     }
