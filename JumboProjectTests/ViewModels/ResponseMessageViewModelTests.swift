@@ -56,7 +56,7 @@ class ResponseMessageViewModelTests: XCTestCase {
         XCTAssertEqual(sut!.progress.completedUnitCount, 100)
     }
 
-    func testError() {
+    func testErrorWithValidStateText() {
         let expectedOutput = ResponseMessageViewModel.State.error
         
         sut!.handleStateChanges(state: "error", progress: 95)

@@ -27,6 +27,7 @@ class ResponseMessageViewModel {
         self.state = .loading
     }
     
+    
     func handleStateChanges(state: String, progress: Int) {
         if progress != 0 { self.progress.completedUnitCount = Int64(progress) }
         self.state = state.isEmpty ? self.state: State(rawValue: state) ?? .error
