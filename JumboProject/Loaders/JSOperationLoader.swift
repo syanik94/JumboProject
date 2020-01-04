@@ -87,6 +87,8 @@ class JSOperationLoader: NSObject {
     }
 }
 
+    // MARK: - WKNavigationDelegate Methods
+
 extension JSOperationLoader: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         evaluateJavascript()
@@ -95,6 +97,8 @@ extension JSOperationLoader: WKNavigationDelegate {
         delegate?.didEncounterError(for: id, error: .networkFailure)
     }
 }
+
+    // MARK: - WKScriptMessageHandler Methods
 
 extension JSOperationLoader: WKScriptMessageHandler {
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
@@ -109,8 +113,9 @@ extension JSOperationLoader: WKScriptMessageHandler {
         if let messageResponse = try? JSONDecoder().decode(ResponseMessage.self, from: data) {
             let progress = messageResponse.progress ?? 0
             let state = messageResponse.state ?? ""
-            
             delegate?.didCompleteLoadingOperation(for: id, progress: progress, state: state)
+        } else {
+            delegate?.didEncounterError(for: id, error: .jsonDecodingError)
         }
     }
 }

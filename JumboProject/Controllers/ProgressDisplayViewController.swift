@@ -16,7 +16,6 @@ class ProgressDisplayViewController: UITableViewController {
         
     private(set) var responseMessageViewModels: [ResponseMessageViewModel] = []
     
-    
     // MARK: - View Lifecycle Methods
     
     override func loadView() {

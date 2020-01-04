@@ -16,6 +16,7 @@ enum JSLoaderError: Error {
     case messageCastToStringFailure
     case dataConversionFailure
     case networkFailure
+    case jsonDecodingError
     
     var localizedDescription: String {
         switch self {
@@ -33,11 +34,13 @@ enum JSLoaderError: Error {
             return "Failed to convert String to Data"
         case .networkFailure:
             return "Failed to navigate to URL"
+        case .jsonDecodingError:
+            return "JSON Decoding Error"
         }
     }
 }
 
-class ResponseMessageViewModel {
+final class ResponseMessageViewModel {
     enum State: Equatable {
         case pending
         case loading

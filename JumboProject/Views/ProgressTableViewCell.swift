@@ -30,7 +30,6 @@ final class ProgressTableViewCell: UITableViewCell {
         let l = UILabel()
         l.numberOfLines = 0
         l.translatesAutoresizingMaskIntoConstraints = false
-//        l.widthAnchor.constraint(equalToConstant: 100).isActive = true
         l.text = "Waiting..."
         return l
     }()
@@ -109,12 +108,10 @@ final class ProgressTableViewCell: UITableViewCell {
             errorDescription = "Evaluation Failed!"
         case .invalidUrl:
             errorDescription = "Invalid URL!"
-        case .messageCastToStringFailure:
-            errorDescription = "Data Failure!"
-        case .dataConversionFailure:
-            errorDescription = "Data Failure!"
         case .networkFailure:
             errorDescription = "Network Failure!"
+        default:
+            errorDescription = "Data Failure!"
         }
         progressLabel.text = errorDescription
         progressView.progressTintColor = .systemRed

@@ -8,6 +8,9 @@
 
 import Foundation
 
+/*
+ Structure of returned message from Javascript file
+ */
 struct ResponseMessage: Codable {
     let id: String
     var progress: Int?
