@@ -35,10 +35,13 @@ class JSOperationLoader: NSObject {
     
     // MARK: - Setup
     
+    /*
+     WebView setup where javascript content is added, listen for posted messages, webView is instantiated
+     */
     fileprivate func setupWebView() {
         let config = WKWebViewConfiguration()
         let userContentController = WKUserContentController()
-        let userScript = WKUserScript(source: loadJavascriptContents(), injectionTime: .atDocumentEnd, forMainFrameOnly: true)
+        let userScript = WKUserScript(source: loadJavascriptContents(), injectionTime: .atDocumentStart, forMainFrameOnly: true)
         userContentController.addUserScript(userScript)
         userContentController.add(self, name: "jumbo")
         config.userContentController = userContentController
@@ -48,17 +51,24 @@ class JSOperationLoader: NSObject {
     
     // MARK: - API Methods
     
+    /*
+     Begins URL loading by the webView, later informing WKNavigationDelegate, informs the delegate of error
+     */
     func load() {
         guard let url = URL(string: Constant.jsEndpoint) else {
-            self.delegate?.didEncounterError(for: self.id, error: .invalidUrl)
+            delegate?.didEncounterError(for: id, error: .invalidUrl)
             return
         }
         let request = URLRequest(url: url)
         webView.load(request)
     }
     
-    // MARK: - Helper Methods
+    // MARK: - Private Methods
     
+    /*
+    Handles calling startOperation(id) from the Javascript file which triggers WKScriptMessageHandler didReceive method,
+     updates the delegate in error case
+    */
     private func evaluateJavascript() {
         webView.evaluateJavaScript("startOperation('\(id)')") { (_, err) in
             if let _ = err {
@@ -67,13 +77,22 @@ class JSOperationLoader: NSObject {
         }
     }
     
-    func loadJavascriptContents() -> String {
+    private func loadJavascriptContents() -> String {
         guard let url = URL(string: Constant.jsEndpoint) else {
             self.delegate?.didEncounterError(for: self.id, error: .invalidUrl)
             return ""
         }
         let contents = try? String(contentsOf: url)
         return contents ?? ""
+    }
+}
+
+extension JSOperationLoader: WKNavigationDelegate {
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        evaluateJavascript()
+    }
+    func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+        delegate?.didEncounterError(for: id, error: .networkFailure)
     }
 }
 
@@ -94,18 +113,7 @@ extension JSOperationLoader: WKScriptMessageHandler {
             delegate?.didCompleteLoadingOperation(for: id, progress: progress, state: state)
         }
     }
-    
-    func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
-        delegate?.didEncounterError(for: id, error: .networkFailure)
-    }
 }
-
-extension JSOperationLoader: WKNavigationDelegate {
-    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        evaluateJavascript()
-    }
-}
-
 
 
 

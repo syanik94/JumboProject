@@ -31,16 +31,17 @@ class ProgressDisplayViewController: UITableViewController {
         loadJSOperations()
     }
     
-    
     // MARK: - View Setup
     
     fileprivate func setupCells() {
         tableView.register(ProgressTableViewCell.self, forCellReuseIdentifier: Constant.progressCellID)
     }
     
-    
     // MARK: - Methods
     
+    /*
+     Loads specifed number of View Model objects with unique ID's
+     */
     func createViewModels() {
         IDLoader.loadIDs(count: 10).forEach { (id) in
             let respObject = ResponseMessage(id: id)
@@ -49,6 +50,9 @@ class ProgressDisplayViewController: UITableViewController {
         }
     }
     
+    /*
+     Creates a Javascript loading operation for each View Model and assigns delegate
+     */
     func loadJSOperations() {
         responseMessageViewModels.forEach { (viewModel) in
             let jsLoader = JSOperationLoader(id: viewModel.id)
@@ -57,7 +61,6 @@ class ProgressDisplayViewController: UITableViewController {
         }
     }
 
-    
     // MARK: - TableView Datasource Methods
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -72,7 +75,7 @@ class ProgressDisplayViewController: UITableViewController {
     }
 }
 
-// MARK: - JSOperation Loader Delegate
+    // MARK: - JSOperation Loader Delegate
 
 extension ProgressDisplayViewController: JSOperationLoaderDelegate {
     func didCompleteLoadingOperation(for title: String, progress: Int, state: String) {
