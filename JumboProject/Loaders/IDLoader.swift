@@ -9,12 +9,8 @@
 import Foundation
 
 struct IDLoader {
-    static func loadIDs() -> [String] {
-        var ids: [String] = []
-        for _ in 1...8 {
-            let id = UUID().uuidString
-            ids.append(id)
-        }
-        return ids
+    static func loadIDs(count: Int) -> [String] {
+        guard count > 0 else { return [] }
+        return (1...count).map { _ in UUID().uuidString }
     }
 }

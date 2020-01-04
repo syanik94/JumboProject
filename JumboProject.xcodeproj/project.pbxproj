@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		3D518BDD23BF85150032B268 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D518BDC23BF85150032B268 /* AppDelegate.swift */; };
 		3D518BDF23BF85150032B268 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D518BDE23BF85150032B268 /* SceneDelegate.swift */; };
-		3D518BE123BF85150032B268 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D518BE023BF85150032B268 /* ViewController.swift */; };
+		3D518BE123BF85150032B268 /* ProgressDisplayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D518BE023BF85150032B268 /* ProgressDisplayViewController.swift */; };
 		3D518BE323BF85180032B268 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3D518BE223BF85180032B268 /* Assets.xcassets */; };
 		3D518BE623BF85180032B268 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3D518BE523BF85180032B268 /* Preview Assets.xcassets */; };
 		3D518BE923BF85180032B268 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3D518BE723BF85180032B268 /* LaunchScreen.storyboard */; };
@@ -35,7 +35,7 @@
 		3D518BD923BF85150032B268 /* JumboProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JumboProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D518BDC23BF85150032B268 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3D518BDE23BF85150032B268 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		3D518BE023BF85150032B268 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		3D518BE023BF85150032B268 /* ProgressDisplayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressDisplayViewController.swift; sourceTree = "<group>"; };
 		3D518BE223BF85180032B268 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3D518BE523BF85180032B268 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		3D518BE823BF85180032B268 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -132,7 +132,7 @@
 		3D518BFF23BF85A50032B268 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				3D518BE023BF85150032B268 /* ViewController.swift */,
+				3D518BE023BF85150032B268 /* ProgressDisplayViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -286,7 +286,7 @@
 				3D518BDD23BF85150032B268 /* AppDelegate.swift in Sources */,
 				3D518C1023BFB6EA0032B268 /* IDLoader.swift in Sources */,
 				3D518BDF23BF85150032B268 /* SceneDelegate.swift in Sources */,
-				3D518BE123BF85150032B268 /* ViewController.swift in Sources */,
+				3D518BE123BF85150032B268 /* ProgressDisplayViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

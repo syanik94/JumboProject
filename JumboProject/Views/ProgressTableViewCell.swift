@@ -9,28 +9,28 @@
 import UIKit
 
 final class ProgressTableViewCell: UITableViewCell {
-        
+    
     var viewModel: ResponseMessageViewModel? {
         didSet {
             guard let viewModel = viewModel else { return }
-            
             switch viewModel.state {
-            case .error:
-                handleErrorState()
+            case .error(let error):
+                handleErrorState(error: error)
             case .success:
                 handleSuccessState()
             default:
                 progressLabel.text = "Loading..."
-                let currentProgress = viewModel.progress.fractionCompleted
-                progressView.setProgress(Float(currentProgress), animated: false)
+                let currentProgress = Float(viewModel.progress.fractionCompleted)
+                progressView.setProgress(currentProgress, animated: false)
             }
         }
     }
     
     private let progressLabel: UILabel = {
         let l = UILabel()
+        l.numberOfLines = 0
         l.translatesAutoresizingMaskIntoConstraints = false
-        l.widthAnchor.constraint(equalToConstant: 100).isActive = true
+//        l.widthAnchor.constraint(equalToConstant: 100).isActive = true
         l.text = "Waiting..."
         return l
     }()
@@ -61,10 +61,10 @@ final class ProgressTableViewCell: UITableViewCell {
         super.init(coder: coder)
     }
     
-    
     // MARK: - View Setup
     
     fileprivate func setupContentView() {
+        selectionStyle = .none
         addSubview(contentStackView)
         NSLayoutConstraint.activate([
             contentStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
@@ -98,8 +98,25 @@ final class ProgressTableViewCell: UITableViewCell {
         }
     }
     
-    fileprivate func handleErrorState() {
-        progressLabel.text = "Error!"
+    fileprivate func handleErrorState(error: JSLoaderError) {
+        var errorDescription: String
+        switch error {
+        case .operationFailure:
+            errorDescription = "Operation Failed!"
+        case .invalidStateString:
+            errorDescription = "Invalid String!"
+        case .javascriptEvaluationFailure:
+            errorDescription = "Evaluation Failed!"
+        case .invalidUrl:
+            errorDescription = "Invalid URL!"
+        case .messageCastToStringFailure:
+            errorDescription = "Data Failure!"
+        case .dataConversionFailure:
+            errorDescription = "Data Failure!"
+        case .networkFailure:
+            errorDescription = "Network Failure!"
+        }
+        progressLabel.text = errorDescription
         progressView.progressTintColor = .systemRed
     }
 }

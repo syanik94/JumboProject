@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UITableViewController {
+class ProgressDisplayViewController: UITableViewController {
     
     enum Constant {
         static let progressCellID = "progressCellID"
@@ -42,7 +42,7 @@ class ViewController: UITableViewController {
     // MARK: - Methods
     
     func createViewModels() {
-        IDLoader.loadIDs().forEach { (id) in
+        IDLoader.loadIDs(count: 10).forEach { (id) in
             let respObject = ResponseMessage(id: id)
             let viewModel = ResponseMessageViewModel(responseMessage: respObject)
             self.responseMessageViewModels.append(viewModel)
@@ -74,20 +74,22 @@ class ViewController: UITableViewController {
 
 // MARK: - JSOperation Loader Delegate
 
-extension ViewController: JSOperationLoaderDelegate {
+extension ProgressDisplayViewController: JSOperationLoaderDelegate {
     func didCompleteLoadingOperation(for title: String, progress: Int, state: String) {
         if let index = responseMessageViewModels.firstIndex(where: { $0.id == title }) {
             let responseViewModel = responseMessageViewModels[index]
             responseViewModel.handleStateChanges(state: state, progress: progress)
-            self.tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .none)
+            
+            tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .none)
         }
     }
     
-    func didEncounterError(for title: String, state: ResponseMessageViewModel.State) {
+    func didEncounterError(for title: String, error: JSLoaderError) {
         if let index = responseMessageViewModels.firstIndex(where: { $0.id == title }) {
             let responseViewModel = responseMessageViewModels[index]
-            responseViewModel.state = state
-            self.tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .none)
+            responseViewModel.state = .error(type: error)
+            
+            tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .none)
         }
     }
 }
