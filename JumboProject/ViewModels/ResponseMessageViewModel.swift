@@ -40,7 +40,7 @@ enum JSLoaderError: Error {
     }
 }
 
-final class ResponseMessageViewModel {
+final class ResponseMessageViewModel {    
     enum State: Equatable {
         case pending
         case loading
@@ -59,19 +59,39 @@ final class ResponseMessageViewModel {
         }
     }
     
+    var updateHandler: (String) -> Void = {_ in }
+    
     let id: String
     let progress = Progress(totalUnitCount: 100)
     var state: State = .pending
-    
-    init(responseMessage: ResponseMessage) {
+    weak var loader: JSOperationLoaderProtocol?
+
+    init(responseMessage: ResponseMessage,
+         jsLoader: JSOperationLoaderProtocol = JSOperationLoader()) {
         self.id = responseMessage.id
-        self.state = .loading
+        self.loader = jsLoader
+        loader?.delegate = self
     }
     
-    func handleStateChanges(state: String, progress: Int) {
-        if progress != 0 { self.progress.completedUnitCount = Int64(progress) }
-        self.state = state.isEmpty ? self.state : State.getState(from: state)
-        if self.state == .success { self.progress.completedUnitCount = Int64(100) }
+    func load() {
+        state = .loading
+        loader?.load(with: id)
+    }
+}
+
+// MARK: - JSOperationLoaderDelegate Methods
+
+extension ResponseMessageViewModel: JSOperationLoaderDelegate {
+    func didLoad(with response: ResponseCompletion) {
+        progress.completedUnitCount = Int64(response.progress)
+        state = response.state.isEmpty ? state : State.getState(from: response.state)
+        if state == .success { progress.completedUnitCount = Int64(100) }
+        updateHandler(id)
+    }
+    
+    func didReceiveError(error: JSLoaderError) {
+        self.state = .error(type: error)
+        updateHandler(id)
     }
 }
 

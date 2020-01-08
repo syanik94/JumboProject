@@ -21,11 +21,11 @@ class ProgressDisplayViewController: UITableViewController {
     override func loadView() {
         super.loadView()
         navigationItem.title = "Jumbo Project 🐘"
+        setupCells()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupCells()
         createViewModels()
         loadJSOperations()
     }
@@ -50,13 +50,16 @@ class ProgressDisplayViewController: UITableViewController {
     }
     
     /*
-     Creates a Javascript loading operation for each View Model and assigns delegate
+     Loads a Javascript loading operation for each View Model and assigns delegate
      */
     func loadJSOperations() {
-        responseMessageViewModels.forEach { (viewModel) in
-            let jsLoader = JSOperationLoader(id: viewModel.id)
-            jsLoader.delegate = self
-            jsLoader.load()
+        responseMessageViewModels.forEach { (vm) in
+            vm.updateHandler = { [weak self] id in
+                if let row = self?.responseMessageViewModels.firstIndex(where: { $0.id == id }) {
+                    self?.tableView.reloadRows(at: [IndexPath(row: row, section: 0)], with: .none)
+                }
+            }
+            vm.load()
         }
     }
 
@@ -71,27 +74,5 @@ class ProgressDisplayViewController: UITableViewController {
         let vm = responseMessageViewModels[indexPath.item]
         cell?.viewModel = vm
         return cell ?? UITableViewCell()
-    }
-}
-
-    // MARK: - JSOperation Loader Delegate
-
-extension ProgressDisplayViewController: JSOperationLoaderDelegate {
-    func didCompleteLoadingOperation(for title: String, progress: Int, state: String) {
-        if let index = responseMessageViewModels.firstIndex(where: { $0.id == title }) {
-            let responseViewModel = responseMessageViewModels[index]
-            responseViewModel.handleStateChanges(state: state, progress: progress)
-            
-            tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .none)
-        }
-    }
-    
-    func didEncounterError(for title: String, error: JSLoaderError) {
-        if let index = responseMessageViewModels.firstIndex(where: { $0.id == title }) {
-            let responseViewModel = responseMessageViewModels[index]
-            responseViewModel.state = .error(type: error)
-            
-            tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .none)
-        }
     }
 }

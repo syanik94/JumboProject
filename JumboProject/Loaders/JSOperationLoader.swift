@@ -10,11 +10,17 @@ import Foundation
 import WebKit
 
 protocol JSOperationLoaderDelegate: class {
-    func didCompleteLoadingOperation(for title: String, progress: Int, state: String)
-    func didEncounterError(for title: String, error: JSLoaderError)
+    typealias ResponseCompletion = (progress: Int, state: String)
+    func didLoad(with response: ResponseCompletion)
+    func didReceiveError(error: JSLoaderError)
 }
 
-class JSOperationLoader: NSObject {
+protocol JSOperationLoaderProtocol: class {
+    func load(with id: String)
+    var delegate: JSOperationLoaderDelegate? { get set }
+}
+
+class JSOperationLoader: NSObject, JSOperationLoaderProtocol {
     enum Constant {
         static let jsEndpoint = "https://jumboassetsv1.blob.core.windows.net/publicfiles/interview_bundle.js"
     }
@@ -23,12 +29,11 @@ class JSOperationLoader: NSObject {
     
     weak var delegate: JSOperationLoaderDelegate?
     var webView: WKWebView!
-    let id: String
+    var id: String?
         
     // MARK: - Initializer
     
-    init(id: String) {
-        self.id = id
+    override init() {
         super.init()
         setupWebView()
     }
@@ -54,9 +59,10 @@ class JSOperationLoader: NSObject {
     /*
      Begins URL loading by the webView, later informing WKNavigationDelegate, informs the delegate of error
      */
-    func load() {
+    func load(with id: String) {
+        self.id = id
         guard let url = URL(string: Constant.jsEndpoint) else {
-            delegate?.didEncounterError(for: id, error: .invalidUrl)
+            delegate?.didReceiveError(error: .invalidUrl)
             return
         }
         let request = URLRequest(url: url)
@@ -70,20 +76,36 @@ class JSOperationLoader: NSObject {
      updates the delegate in error case
     */
     private func evaluateJavascript() {
+        guard let id = id else { return }
         webView.evaluateJavaScript("startOperation('\(id)')") { (_, err) in
             if let _ = err {
-                self.delegate?.didEncounterError(for: self.id, error: .javascriptEvaluationFailure)
+                self.delegate?.didReceiveError(error: .javascriptEvaluationFailure)
             }
         }
     }
     
     private func loadJavascriptContents() -> String {
         guard let url = URL(string: Constant.jsEndpoint) else {
-            self.delegate?.didEncounterError(for: self.id, error: .invalidUrl)
+            self.delegate?.didReceiveError(error: .invalidUrl)
             return ""
         }
         let contents = try? String(contentsOf: url)
         return contents ?? ""
+    }
+    
+    func handleReceivedMessage(message: String) {
+        guard let data = message.data(using: .utf8) else {
+            self.delegate?.didReceiveError(error: .dataConversionFailure)
+            return
+        }
+        if let messageResponse = try? JSONDecoder().decode(ResponseMessage.self, from: data) {
+            let progress = messageResponse.progress ?? 0
+            let state = messageResponse.state ?? ""
+            let responseSuccess = (progress, state)
+            delegate?.didLoad(with: responseSuccess)
+        } else {
+            self.delegate?.didReceiveError(error: .jsonDecodingError)
+        }
     }
 }
 
@@ -94,7 +116,7 @@ extension JSOperationLoader: WKNavigationDelegate {
         evaluateJavascript()
     }
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
-        delegate?.didEncounterError(for: id, error: .networkFailure)
+        delegate?.didReceiveError(error: .networkFailure)
     }
 }
 
@@ -102,20 +124,10 @@ extension JSOperationLoader: WKNavigationDelegate {
 
 extension JSOperationLoader: WKScriptMessageHandler {
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        guard let mbody = message.body as? String else {
-            delegate?.didEncounterError(for: id, error: .messageCastToStringFailure)
-            return
-        }
-        guard let data = mbody.data(using: .utf8) else {
-            delegate?.didEncounterError(for: id, error: .dataConversionFailure)
-            return
-        }
-        if let messageResponse = try? JSONDecoder().decode(ResponseMessage.self, from: data) {
-            let progress = messageResponse.progress ?? 0
-            let state = messageResponse.state ?? ""
-            delegate?.didCompleteLoadingOperation(for: id, progress: progress, state: state)
+        if let messageBody = message.body as? String {
+            handleReceivedMessage(message: messageBody)
         } else {
-            delegate?.didEncounterError(for: id, error: .jsonDecodingError)
+            delegate?.didReceiveError(error: .messageCastToStringFailure)
         }
     }
 }
