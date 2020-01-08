@@ -3,7 +3,7 @@
 The requirement is to build a single-screen app to execute multiple "operations" defined in a javascript file, and display the progress and state of these operations to the user.
 _______________________
 ## Design
-<img src="/imgs/JS Operation Loading v2.png"  width="750" height="200"> 
+<img src="/imgs/JS Operation Loading v3.png"  width="750" height="200"> 
 
 #### ID Loader
 - Responsible for generating a specifed number of opaque unique ID's
