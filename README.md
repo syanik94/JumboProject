@@ -9,7 +9,7 @@ _______________________
 - Responsible for generating a specifed number of opaque unique ID's
 #### ProgressDisplayViewController
 - Responsible for creating ResponseMessageViewModel and responding to its changes
-### ResponseMessageViewModel
+#### ResponseMessageViewModel
 - Created with a specific opaque unique ID
 - Conforms to JSOperationLoaderDelegate to receive updates
 - Owns JSOperationLoader through JSOperationLoaderProtocol property
