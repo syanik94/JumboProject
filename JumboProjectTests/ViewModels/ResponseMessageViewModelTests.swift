@@ -14,98 +14,69 @@ class ResponseMessageViewModelTests: XCTestCase {
     var sut: ResponseMessageViewModel!
     
     func testInitialState() {
-        sut = makeSUT(responseCompletion: (0, ""))
+        sut = makeSUT()
+        
         let expectedOutput = ResponseMessageViewModel.State.loading
 
-        XCTAssertNotNil(sut.loader)
-        sut.load()
-        
         XCTAssertEqual(sut.state, expectedOutput)
     }
     
     func testLoadingState() {
-        sut = makeSUT(responseCompletion: (32, ""))
-        let expectedOutput = ResponseMessageViewModel.State.loading
-        let testExpectation = expectation(description: #function)
+        sut = makeSUT()
+        let expectedStateOutput = ResponseMessageViewModel.State.loading
+
+        let initialResponseCompletion = ("test", 11, "")
         
-        sut.updateHandler = { (id) in
-            XCTAssertEqual(id, "test", "ID should match ResponseMessage.id")
-            print(self.sut.state)
-            if self.sut.state == .loading { testExpectation.fulfill() }
-        }
-        sut.load()
+        sut.updateState(from: initialResponseCompletion)
         
-        wait(for: [testExpectation], timeout: 1)
-        XCTAssertEqual(sut.state, expectedOutput)
+        XCTAssertEqual(sut.state, expectedStateOutput)
+        XCTAssertEqual(sut.progress.completedUnitCount, 11)
+        
+        let secondResponseCompletion = ("test", 32, "")
+        sut.updateState(from: secondResponseCompletion)
+
+        XCTAssertEqual(sut.state, expectedStateOutput)
         XCTAssertEqual(sut.progress.completedUnitCount, 32)
     }
-    
+
     func testSuccessState() {
-        sut = makeSUT(responseCompletion: (32, "success"))
-        let expectedOutput = ResponseMessageViewModel.State.success
-        let testExpectation = expectation(description: #function)
+        sut = makeSUT()
+        let expectedStateOutput = ResponseMessageViewModel.State.success
         
-        sut.updateHandler = { (id) in
-            XCTAssertEqual(id, "test", "ID should match ResponseMessage.id")
-            if self.sut.state == .success { testExpectation.fulfill() }
-        }
-        sut.load()
+        let successResponseCompletion = ("test", 95, "success")
+        sut.updateState(from: successResponseCompletion)
         
-        wait(for: [testExpectation], timeout: 1)
-        XCTAssertEqual(sut.state, expectedOutput)
+        XCTAssertEqual(sut.state, expectedStateOutput)
         XCTAssertEqual(sut.progress.completedUnitCount, 100)
     }
     
-    func testErrorWithInvalidStateText() {
-        sut = makeSUT(responseCompletion: (32, "err"))
-        let expectedOutput = ResponseMessageViewModel.State.error(type: .invalidStateString)
-        let testExpectation = expectation(description: #function)
+    func testErrorFromOperationFailure() {
+        sut = makeSUT()
+        let expectedStateOutput = ResponseMessageViewModel.State.error(type: .operationFailure)
         
-        sut.updateHandler = { (id) in
-            XCTAssertEqual(id, "test", "ID should match ResponseMessage.id")
-            if self.sut.state == .error(type: .invalidStateString) { testExpectation.fulfill() }
-        }
-        sut.load()
+        let errorResponseCompletion = ("test", 95, "error")
+        sut.updateState(from: errorResponseCompletion)
         
-        wait(for: [testExpectation], timeout: 1)
-        XCTAssertEqual(sut.state, expectedOutput)
-        XCTAssertEqual(sut.progress.completedUnitCount, 32)
-    }
-        
-    func testRetainCycle() {
-        let completion = (progress: 32, state: "")
-        let message = ResponseMessage(id: "test")
-        var loader = MockLoader(responseCompletion: completion)
-        
-        sut = ResponseMessageViewModel(responseMessage: message, jsLoader: loader)
-        XCTAssertNotNil(sut.loader)
-        loader = MockLoader(responseCompletion: completion)
-        
-        XCTAssertNil(sut.loader)
+        XCTAssertEqual(sut.state, expectedStateOutput)
+        XCTAssertEqual(sut.progress.completedUnitCount, 95)
     }
     
-    // MARK: - Helpers
-    
-    fileprivate func makeSUT(responseCompletion: ResponseCompletion) -> ResponseMessageViewModel {
-        let message = ResponseMessage(id: "test")
-        let mockLoader = MockLoader(responseCompletion: responseCompletion)
-        let vm = ResponseMessageViewModel(responseMessage: message, jsLoader: mockLoader)
-        return vm
+    func testErrorFromInvalidStateString() {
+        sut = makeSUT()
+        let expectedStateOutput = ResponseMessageViewModel.State.error(type: .invalidStateString(state: "succ"))
+        
+        let attemptedSuccessResponseCompletion = ("test", 95, "succ")
+        sut.updateState(from: attemptedSuccessResponseCompletion)
+        
+        XCTAssertEqual(sut.state, expectedStateOutput)
+        XCTAssertEqual(sut.progress.completedUnitCount, 95)
     }
-}
 
-fileprivate typealias ResponseCompletion = (progress: Int, state: String)
-class MockLoader: JSOperationLoaderProtocol {
-    weak var delegate: JSOperationLoaderDelegate?
-    fileprivate let responseCompletion: ResponseCompletion
-    
-    fileprivate init(responseCompletion: ResponseCompletion) {
-        self.responseCompletion = responseCompletion
-    }
-    
-    func load(with id: String) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
-            self.delegate?.didLoad(with: self.responseCompletion)
-        }
+    // MARK: - Helpers
+
+    fileprivate func makeSUT() -> ResponseMessageViewModel {
+        let message = ResponseMessage(id: "test")
+        let vm = ResponseMessageViewModel(responseMessage: message)
+        return vm
     }
 }
