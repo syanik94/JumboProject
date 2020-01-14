@@ -21,6 +21,7 @@
 		3D518C1023BFB6EA0032B268 /* IDLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D518C0F23BFB6EA0032B268 /* IDLoader.swift */; };
 		3DA7540723CE3C70009868AF /* ProgressDisplayLogicController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA7540623CE3C70009868AF /* ProgressDisplayLogicController.swift */; };
 		3DA7540B23CE541C009868AF /* ProgressDisplayLogicControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA7540A23CE541C009868AF /* ProgressDisplayLogicControllerTests.swift */; };
+		3DA7540E23CE6AAA009868AF /* JSOperationLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA7540D23CE6AAA009868AF /* JSOperationLoaderTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +53,7 @@
 		3D518C0F23BFB6EA0032B268 /* IDLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDLoader.swift; sourceTree = "<group>"; };
 		3DA7540623CE3C70009868AF /* ProgressDisplayLogicController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressDisplayLogicController.swift; sourceTree = "<group>"; };
 		3DA7540A23CE541C009868AF /* ProgressDisplayLogicControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressDisplayLogicControllerTests.swift; sourceTree = "<group>"; };
+		3DA7540D23CE6AAA009868AF /* JSOperationLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSOperationLoaderTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,6 +120,7 @@
 		3D518BF223BF85180032B268 /* JumboProjectTests */ = {
 			isa = PBXGroup;
 			children = (
+				3DA7540C23CE6A93009868AF /* Loaders */,
 				3DA7540923CE53F9009868AF /* Logic Controllers */,
 				3D518C0A23BF88510032B268 /* ViewModels */,
 				3D518BF523BF85180032B268 /* Info.plist */,
@@ -198,6 +201,14 @@
 				3DA7540A23CE541C009868AF /* ProgressDisplayLogicControllerTests.swift */,
 			);
 			path = "Logic Controllers";
+			sourceTree = "<group>";
+		};
+		3DA7540C23CE6A93009868AF /* Loaders */ = {
+			isa = PBXGroup;
+			children = (
+				3DA7540D23CE6AAA009868AF /* JSOperationLoaderTests.swift */,
+			);
+			path = Loaders;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -319,6 +330,7 @@
 			files = (
 				3DA7540B23CE541C009868AF /* ProgressDisplayLogicControllerTests.swift in Sources */,
 				3D518BF423BF85180032B268 /* ResponseMessageViewModelTests.swift in Sources */,
+				3DA7540E23CE6AAA009868AF /* JSOperationLoaderTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
