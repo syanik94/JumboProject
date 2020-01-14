@@ -19,6 +19,7 @@
 		3D518C0923BF87BD0032B268 /* ResponseMessageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D518C0823BF87BD0032B268 /* ResponseMessageViewModel.swift */; };
 		3D518C0E23BFADB20032B268 /* ProgressTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D518C0D23BFADB20032B268 /* ProgressTableViewCell.swift */; };
 		3D518C1023BFB6EA0032B268 /* IDLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D518C0F23BFB6EA0032B268 /* IDLoader.swift */; };
+		3DA7540723CE3C70009868AF /* ProgressDisplayLogicController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA7540623CE3C70009868AF /* ProgressDisplayLogicController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +49,7 @@
 		3D518C0823BF87BD0032B268 /* ResponseMessageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseMessageViewModel.swift; sourceTree = "<group>"; };
 		3D518C0D23BFADB20032B268 /* ProgressTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressTableViewCell.swift; sourceTree = "<group>"; };
 		3D518C0F23BFB6EA0032B268 /* IDLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDLoader.swift; sourceTree = "<group>"; };
+		3DA7540623CE3C70009868AF /* ProgressDisplayLogicController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressDisplayLogicController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,6 +96,7 @@
 				3D518C0123BF85E20032B268 /* Models */,
 				3D518C0023BF85DC0032B268 /* Loaders */,
 				3D518BFF23BF85A50032B268 /* Controllers */,
+				3DA7540523CE3C4D009868AF /* Logic Controllers */,
 				3D518C0323BF85EA0032B268 /* ViewModels */,
 				3D518BE223BF85180032B268 /* Assets.xcassets */,
 				3D518BEA23BF85180032B268 /* Info.plist */,
@@ -176,6 +179,14 @@
 				3D518BF323BF85180032B268 /* ResponseMessageViewModelTests.swift */,
 			);
 			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		3DA7540523CE3C4D009868AF /* Logic Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				3DA7540623CE3C70009868AF /* ProgressDisplayLogicController.swift */,
+			);
+			path = "Logic Controllers";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -282,6 +293,7 @@
 				3D518C0523BF86E30032B268 /* ResponseMessage.swift in Sources */,
 				3D518C0923BF87BD0032B268 /* ResponseMessageViewModel.swift in Sources */,
 				3D518C0E23BFADB20032B268 /* ProgressTableViewCell.swift in Sources */,
+				3DA7540723CE3C70009868AF /* ProgressDisplayLogicController.swift in Sources */,
 				3D518C0723BF87A30032B268 /* JSOperationLoader.swift in Sources */,
 				3D518BDD23BF85150032B268 /* AppDelegate.swift in Sources */,
 				3D518C1023BFB6EA0032B268 /* IDLoader.swift in Sources */,

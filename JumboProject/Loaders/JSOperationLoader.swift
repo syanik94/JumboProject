@@ -10,14 +10,15 @@ import Foundation
 import WebKit
 
 protocol JSOperationLoaderDelegate: class {
-    typealias ResponseCompletion = (progress: Int, state: String)
+    typealias ResponseCompletion = (id: String, progress: Int, state: String)
     func didLoad(with response: ResponseCompletion)
     func didReceiveError(error: JSLoaderError)
 }
 
 protocol JSOperationLoaderProtocol: class {
-    func load(with id: String)
     var delegate: JSOperationLoaderDelegate? { get set }
+    var ids: [String] { get set }
+    func load()
 }
 
 class JSOperationLoader: NSObject, JSOperationLoaderProtocol {
@@ -28,8 +29,8 @@ class JSOperationLoader: NSObject, JSOperationLoaderProtocol {
     // MARK: - Dependencies
     
     weak var delegate: JSOperationLoaderDelegate?
-    var webView: WKWebView!
-    var id: String?
+    private(set) var webView: WKWebView!
+    var ids = [String]()
         
     // MARK: - Initializer
     
@@ -59,10 +60,9 @@ class JSOperationLoader: NSObject, JSOperationLoaderProtocol {
     /*
      Begins URL loading by the webView, later informing WKNavigationDelegate, informs the delegate of error
      */
-    func load(with id: String) {
-        self.id = id
+    func load() {
         guard let url = URL(string: Constant.jsEndpoint) else {
-            delegate?.didReceiveError(error: .invalidUrl)
+            delegate?.didReceiveError(error: .invalidUrl(urlString: Constant.jsEndpoint))
             return
         }
         let request = URLRequest(url: url)
@@ -75,18 +75,19 @@ class JSOperationLoader: NSObject, JSOperationLoaderProtocol {
     Handles calling startOperation(id) from the Javascript file which triggers WKScriptMessageHandler didReceive method,
      updates the delegate in error case
     */
-    private func evaluateJavascript() {
-        guard let id = id else { return }
-        webView.evaluateJavaScript("startOperation('\(id)')") { (_, err) in
-            if let _ = err {
-                self.delegate?.didReceiveError(error: .javascriptEvaluationFailure)
+    func evaluateJavascript() {
+        ids.forEach { (id) in
+            webView.evaluateJavaScript("startOperation('\(id)')") { (_, err) in
+                if let _ = err {
+                    self.delegate?.didReceiveError(error: .javascriptEvaluationFailure)
+                }
             }
         }
     }
     
     private func loadJavascriptContents() -> String {
         guard let url = URL(string: Constant.jsEndpoint) else {
-            self.delegate?.didReceiveError(error: .invalidUrl)
+            self.delegate?.didReceiveError(error: .invalidUrl(urlString: Constant.jsEndpoint))
             return ""
         }
         let contents = try? String(contentsOf: url)
@@ -99,9 +100,10 @@ class JSOperationLoader: NSObject, JSOperationLoaderProtocol {
             return
         }
         if let messageResponse = try? JSONDecoder().decode(ResponseMessage.self, from: data) {
+            let id = messageResponse.id
             let progress = messageResponse.progress ?? 0
             let state = messageResponse.state ?? ""
-            let responseSuccess = (progress, state)
+            let responseSuccess = (id, progress, state)
             delegate?.didLoad(with: responseSuccess)
         } else {
             self.delegate?.didReceiveError(error: .jsonDecodingError)
