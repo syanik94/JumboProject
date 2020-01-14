@@ -68,7 +68,7 @@ final class ResponseMessageViewModel {
         state = .loading
     }
     
-    func updateState(from response: JSOperationLoaderDelegate.ResponseCompletion) {
+    func updateState(from response: ResponseCompletion) {
         progress.completedUnitCount = Int64(response.progress)
         state = response.state.isEmpty ? state : ResponseMessageViewModel.State.getState(from: response.state)
         if state == .success { progress.completedUnitCount = Int64(100) }

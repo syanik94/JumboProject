@@ -9,13 +9,13 @@
 import Foundation
 import WebKit
 
+typealias ResponseCompletion = (id: String, progress: Int, state: String)
 protocol JSOperationLoaderDelegate: class {
-    typealias ResponseCompletion = (id: String, progress: Int, state: String)
-    func didLoad(with response: ResponseCompletion)
+    func didLoadJavascriptResponse(with response: ResponseCompletion)
     func didReceiveError(error: JSLoaderError)
 }
 
-protocol JSOperationLoaderProtocol: class {
+protocol JSOperationLoaderProtocol {
     var delegate: JSOperationLoaderDelegate? { get set }
     var ids: [String] { get set }
     func load()
@@ -104,7 +104,7 @@ class JSOperationLoader: NSObject, JSOperationLoaderProtocol {
             let progress = messageResponse.progress ?? 0
             let state = messageResponse.state ?? ""
             let responseSuccess = (id, progress, state)
-            delegate?.didLoad(with: responseSuccess)
+            delegate?.didLoadJavascriptResponse(with: responseSuccess)
         } else {
             self.delegate?.didReceiveError(error: .jsonDecodingError)
         }

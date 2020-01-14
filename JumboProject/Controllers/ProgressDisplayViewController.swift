@@ -27,7 +27,6 @@ class ProgressDisplayViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         observeUpdates()
-        logicController.createResponseMessageViewModels()
         logicController.configureJSOperationLoader()
     }
     

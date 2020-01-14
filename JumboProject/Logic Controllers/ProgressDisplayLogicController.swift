@@ -12,16 +12,17 @@ final class ProgressDisplayLogicController {
     
     var handleLoadCompletion: (() -> Void)?
     
-    weak var jsLoader: JSOperationLoaderProtocol?
-    var numberOfResponseMessages = 30
+    var jsLoader: JSOperationLoaderProtocol?
     
     private(set) var responseMessageViewModels: [ResponseMessageViewModel] = []
     private(set) var viewModelLookup: [String: ResponseMessageViewModel] = [:]
     
     // MARK: - Initializer
     
-    init(jsLoader: JSOperationLoaderProtocol = JSOperationLoader()) {
+    init(ids: [String] = IDLoader.loadIDs(count: 30),
+         jsLoader: JSOperationLoaderProtocol = JSOperationLoader()) {
         self.jsLoader = jsLoader
+        createResponseMessageViewModels(from: ids)
     }
     
     // MARK: - Methods
@@ -30,8 +31,8 @@ final class ProgressDisplayLogicController {
      Loads specifed number of View Model objects with unique ID's
      */
     
-    func createResponseMessageViewModels() {
-        IDLoader.loadIDs(count: numberOfResponseMessages).forEach { (id) in
+    func createResponseMessageViewModels(from ids: [String]) {
+        ids.forEach { (id) in
             let respObject = ResponseMessage(id: id)
             let viewModel = ResponseMessageViewModel(responseMessage: respObject)
             viewModelLookup[id] = viewModel
@@ -48,14 +49,18 @@ final class ProgressDisplayLogicController {
         jsLoader?.delegate = self
         jsLoader?.load()
     }
-}
-
-extension ProgressDisplayLogicController: JSOperationLoaderDelegate {
-    func didLoad(with response: ResponseCompletion) {
+    
+    func handleJavascriptLoadResponse(with response: ResponseCompletion) {
         if let vm = viewModelLookup[response.id] {
             vm.updateState(from: response)
             handleLoadCompletion?()
         }
+    }
+}
+
+extension ProgressDisplayLogicController: JSOperationLoaderDelegate {
+    func didLoadJavascriptResponse(with response: ResponseCompletion) {
+        handleJavascriptLoadResponse(with: response)
     }
     
     func didReceiveError(error: JSLoaderError) {

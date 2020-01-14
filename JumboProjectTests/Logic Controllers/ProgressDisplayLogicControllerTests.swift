@@ -15,46 +15,36 @@ class ProgressDisplayLogicControllerTests: XCTestCase {
     
     func testInitialState() {
         sut = makeSUT()
-        
-        XCTAssertTrue(sut.responseMessageViewModels.isEmpty)
-    }
-    
-    func testCreateViewModels() {
-        sut = makeSUT()
-        
-        sut.createResponseMessageViewModels()
-        
+
         XCTAssertEqual(sut.responseMessageViewModels.count, 1)
+        XCTAssertEqual(sut.viewModelLookup.count, 1)
+        XCTAssertEqual(sut.responseMessageViewModels.map { $0.id }, ["test"])
     }
     
-    func testIfLoaderRetained() {
-        var loader = MockJSLoader()
-        let sut = ProgressDisplayLogicController(jsLoader: loader)
-        
-        XCTAssertNotNil(sut.jsLoader)
-        loader = MockJSLoader()
-        
-        XCTAssertNil(sut.jsLoader)
+    func testJSOperationLoadResponse() {
+        sut = makeSUT()
+
+        sut.configureJSOperationLoader()
+
+        XCTAssertEqual(sut.responseMessageViewModels[0].state, ResponseMessageViewModel.State.success)
     }
-    
+
 
     // MARK: - Helpers
     
     func makeSUT() -> ProgressDisplayLogicController {
         let mockJSLoader = MockJSLoader()
-        let logicController = ProgressDisplayLogicController(jsLoader: mockJSLoader)
-        logicController.numberOfResponseMessages = 1
+        let logicController = ProgressDisplayLogicController(ids: ["test"], jsLoader: mockJSLoader)
         return logicController
     }
 }
 
 class MockJSLoader: JSOperationLoaderProtocol {
     weak var delegate: JSOperationLoaderDelegate?
-    
     var ids: [String] = []
     
     func load() {
-        
-//        delegate?.didLoad(with: <#T##(id: String, progress: Int, state: String)#>)
+        let response = (id: "test", progress: 95, state: "success")
+        delegate?.didLoadJavascriptResponse(with: response)
     }
 }
