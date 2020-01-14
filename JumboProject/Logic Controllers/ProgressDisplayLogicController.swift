@@ -8,11 +8,11 @@
 
 import Foundation
 
-class ProgressDisplayLogicController {
+final class ProgressDisplayLogicController {
     
     var handleLoadCompletion: (() -> Void)?
     
-    var jsLoader: JSOperationLoaderProtocol?
+    weak var jsLoader: JSOperationLoaderProtocol?
     var numberOfResponseMessages = 30
     
     private(set) var responseMessageViewModels: [ResponseMessageViewModel] = []
@@ -22,7 +22,6 @@ class ProgressDisplayLogicController {
     
     init(jsLoader: JSOperationLoaderProtocol = JSOperationLoader()) {
         self.jsLoader = jsLoader
-        createResponseMessageViewModels()
     }
     
     // MARK: - Methods
