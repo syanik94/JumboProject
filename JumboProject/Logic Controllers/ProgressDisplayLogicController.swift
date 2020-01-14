@@ -58,6 +58,8 @@ final class ProgressDisplayLogicController {
     }
 }
 
+// MARK: - JSOperationLoaderDelegate Methods
+
 extension ProgressDisplayLogicController: JSOperationLoaderDelegate {
     func didLoadJavascriptResponse(with response: ResponseCompletion) {
         handleJavascriptLoadResponse(with: response)

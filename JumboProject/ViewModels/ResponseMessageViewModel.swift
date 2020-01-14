@@ -61,7 +61,7 @@ final class ResponseMessageViewModel {
     
     let id: String
     let progress = Progress(totalUnitCount: 100)
-    var state: State = .pending
+    private(set) var state: State = .pending
 
     init(responseMessage: ResponseMessage) {
         self.id = responseMessage.id

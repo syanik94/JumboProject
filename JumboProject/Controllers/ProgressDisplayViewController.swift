@@ -27,6 +27,10 @@ class ProgressDisplayViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         observeUpdates()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         logicController.configureJSOperationLoader()
     }
     

@@ -29,7 +29,6 @@ class ProgressDisplayLogicControllerTests: XCTestCase {
         XCTAssertEqual(sut.responseMessageViewModels[0].state, ResponseMessageViewModel.State.success)
     }
 
-
     // MARK: - Helpers
     
     func makeSUT() -> ProgressDisplayLogicController {
