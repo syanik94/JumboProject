@@ -36,6 +36,7 @@ final class ProgressTableViewCell: UITableViewCell {
     
     private let progressView: UIProgressView = {
         let view = UIProgressView(progressViewStyle: UIProgressView.Style.default)
+        view.progressTintColor = .cyan
         return view
     }()
     
@@ -62,6 +63,14 @@ final class ProgressTableViewCell: UITableViewCell {
     
     // MARK: - View Setup
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        progressLabel.text = ""
+        progressLabel.textColor = .label
+        progressView.setProgress(0, animated: false)
+        progressView.progressTintColor = .cyan
+    }
+    
     fileprivate func setupContentView() {
         selectionStyle = .none
         addSubview(contentStackView)
@@ -80,21 +89,12 @@ final class ProgressTableViewCell: UITableViewCell {
         progressView.subviews[1].clipsToBounds = true
     }
     
-    
     // MARK: - State Handlers
     
     fileprivate func handleSuccessState() {
         progressLabel.text = "Success!"
         progressView.setProgress(1, animated: false)
         progressView.progressTintColor = .systemGreen
-        
-        UIView.animate(withDuration: 0.3, animations: {
-            self.progressView.transform = CGAffineTransform(scaleX: 1.03, y: 1.03)
-        }) { (_) in
-            UIView.animate(withDuration: 0.2, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-                self.progressView.transform = .identity
-            })
-        }
     }
     
     fileprivate func handleErrorState(error: JSLoaderError) {
@@ -102,19 +102,11 @@ final class ProgressTableViewCell: UITableViewCell {
         switch error {
         case .operationFailure:
             errorDescription = "Operation Failed!"
-        case .invalidStateString:
-            errorDescription = "Invalid String!"
-        case .javascriptEvaluationFailure:
-            errorDescription = "Evaluation Failed!"
-        case .invalidUrl:
-            errorDescription = "Invalid URL!"
-        case .networkFailure:
-            errorDescription = "Network Failure!"
         default:
-            errorDescription = "Data Failure!"
+            errorDescription = "Failure!"
         }
         progressLabel.text = errorDescription
-        progressView.progressTintColor = .systemRed
+        progressLabel.textColor = .systemRed
     }
 }
 
