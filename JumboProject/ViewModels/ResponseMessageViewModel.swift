@@ -8,11 +8,11 @@
 
 import Foundation
 
-enum JSLoaderError: Error {
+enum JSLoaderError: Error, Equatable {
     case operationFailure
-    case invalidStateString
+    case invalidStateString(state: String)
     case javascriptEvaluationFailure
-    case invalidUrl
+    case invalidUrl(urlString: String)
     case messageCastToStringFailure
     case dataConversionFailure
     case networkFailure
@@ -22,12 +22,12 @@ enum JSLoaderError: Error {
         switch self {
         case .operationFailure:
             return "Javascript operation failure"
-        case .invalidStateString:
-            return "Invalid state string"
+        case .invalidStateString(let state):
+            return "Invalid state string" + state
         case .javascriptEvaluationFailure:
             return "Failed to evaluate Javascript"
-        case .invalidUrl:
-            return "Invalid URL"
+        case .invalidUrl(let urlString):
+            return "Invalid URL" + urlString
         case .messageCastToStringFailure:
             return "Error casting message response to String"
         case .dataConversionFailure:
@@ -54,44 +54,24 @@ final class ResponseMessageViewModel {
             else if stateString == "error" {
                 return .error(type: .operationFailure)
             } else {
-                return .error(type: .invalidStateString)
+                return .error(type: .invalidStateString(state: stateString))
             }
         }
     }
     
-    var updateHandler: (String) -> Void = {_ in }
-    
     let id: String
     let progress = Progress(totalUnitCount: 100)
     var state: State = .pending
-    weak var loader: JSOperationLoaderProtocol?
 
-    init(responseMessage: ResponseMessage,
-         jsLoader: JSOperationLoaderProtocol = JSOperationLoader()) {
+    init(responseMessage: ResponseMessage) {
         self.id = responseMessage.id
-        self.loader = jsLoader
-        loader?.delegate = self
-    }
-    
-    func load() {
         state = .loading
-        loader?.load(with: id)
-    }
-}
-
-// MARK: - JSOperationLoaderDelegate Methods
-
-extension ResponseMessageViewModel: JSOperationLoaderDelegate {
-    func didLoad(with response: ResponseCompletion) {
-        progress.completedUnitCount = Int64(response.progress)
-        state = response.state.isEmpty ? state : State.getState(from: response.state)
-        if state == .success { progress.completedUnitCount = Int64(100) }
-        updateHandler(id)
     }
     
-    func didReceiveError(error: JSLoaderError) {
-        self.state = .error(type: error)
-        updateHandler(id)
+    func updateState(from response: JSOperationLoaderDelegate.ResponseCompletion) {
+        progress.completedUnitCount = Int64(response.progress)
+        state = response.state.isEmpty ? state : ResponseMessageViewModel.State.getState(from: response.state)
+        if state == .success { progress.completedUnitCount = Int64(100) }
     }
 }
 
