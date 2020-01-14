@@ -26,22 +26,9 @@ final class ProgressDisplayLogicController {
     }
     
     // MARK: - Methods
-    
+
     /*
-     Loads specifed number of View Model objects with unique ID's
-     */
-    
-    func createResponseMessageViewModels(from ids: [String]) {
-        ids.forEach { (id) in
-            let respObject = ResponseMessage(id: id)
-            let viewModel = ResponseMessageViewModel(responseMessage: respObject)
-            viewModelLookup[id] = viewModel
-            responseMessageViewModels.append(viewModel)
-        }
-    }
-    
-    /*
-     Loads a Javascript loading operation for each View Model and assigns delegate
+     Loads a Javascript loading operation for each unique ID and assigns delegate
      */
     
     func configureJSOperationLoader() {
@@ -50,7 +37,22 @@ final class ProgressDisplayLogicController {
         jsLoader?.load()
     }
     
-    func handleJavascriptLoadResponse(with response: ResponseCompletion) {
+    // MARK: - Private Functions
+    
+    /*
+     Loads specifed number of View Model objects with unique ID's
+     */
+    
+    private func createResponseMessageViewModels(from ids: [String]) {
+        ids.forEach { (id) in
+            let respObject = ResponseMessage(id: id)
+            let viewModel = ResponseMessageViewModel(responseMessage: respObject)
+            viewModelLookup[id] = viewModel
+            responseMessageViewModels.append(viewModel)
+        }
+    }
+    
+    private func handleJavascriptLoadResponse(with response: ResponseCompletion) {
         if let vm = viewModelLookup[response.id] {
             vm.updateState(from: response)
             handleLoadCompletion?()
