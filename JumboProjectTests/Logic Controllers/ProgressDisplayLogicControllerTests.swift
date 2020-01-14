@@ -27,7 +27,15 @@ class ProgressDisplayLogicControllerTests: XCTestCase {
         XCTAssertEqual(sut.responseMessageViewModels.count, 1)
     }
     
-
+    func testIfLoaderRetained() {
+        var loader = MockJSLoader()
+        let sut = ProgressDisplayLogicController(jsLoader: loader)
+        
+        XCTAssertNotNil(sut.jsLoader)
+        loader = MockJSLoader()
+        
+        XCTAssertNil(sut.jsLoader)
+    }
     
 
     // MARK: - Helpers
