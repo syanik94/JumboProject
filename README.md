@@ -23,4 +23,4 @@ _______________________
 - Passing response and errors to JSOperationLoaderDelegate
 _______________________
 ## Challenges
-A challenge I faced was coming up with a way to properly unit test the JSOperationLoader. My objective was to test the communication to the JSOperationLoaderDelegate. The current design is dependent on the WebKit framework and its methods are tied to WebKit delegate methods. Testing this class would lead to an integration test which is not my objective.
+A challenge I faced was coming up with a way to properly unit test the JSOperationLoader in isolation from WebKit. 
