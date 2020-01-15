@@ -67,7 +67,7 @@ extension ProgressDisplayLogicController: JSOperationLoaderDelegate {
         handleJavascriptLoadResponse(with: response)
     }
     
-    func didReceiveError(error: JSLoaderError) {
+    func didFailLoading(with error: JSLoaderError) {
         // TODO: - Swtich on error and handle accordingly
     }
 }

@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  ProgressDisplayViewController.swift
 //  JumboProject
 //
 //  Created by Yanik Simpson on 1/3/20.

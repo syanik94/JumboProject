@@ -26,5 +26,5 @@ class JSOperationLoaderTests: XCTestCase {
 }
 class MockOperationDelegate: JSOperationLoaderDelegate {
       func didLoadJavascriptResponse(with response: ResponseCompletion) {}
-      func didReceiveError(error: JSLoaderError) {}
+      func didFailLoading(with error: JSLoaderError) {}
   }

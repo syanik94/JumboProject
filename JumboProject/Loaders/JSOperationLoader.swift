@@ -12,7 +12,7 @@ import WebKit
 typealias ResponseCompletion = (id: String, progress: Int, state: String)
 protocol JSOperationLoaderDelegate: class {
     func didLoadJavascriptResponse(with response: ResponseCompletion)
-    func didReceiveError(error: JSLoaderError)
+    func didFailLoading(with error: JSLoaderError)
 }
 
 protocol JSOperationLoaderProtocol {
@@ -62,7 +62,7 @@ class JSOperationLoader: NSObject, JSOperationLoaderProtocol {
      */
     func load() {
         guard let url = URL(string: Constant.jsEndpoint) else {
-            delegate?.didReceiveError(error: .invalidUrl(urlString: Constant.jsEndpoint))
+            delegate?.didFailLoading(with: .invalidUrl(urlString: Constant.jsEndpoint))
             return
         }
         let request = URLRequest(url: url)
@@ -79,7 +79,7 @@ class JSOperationLoader: NSObject, JSOperationLoaderProtocol {
         ids.forEach { (id) in
             webView.evaluateJavaScript("startOperation('\(id)')") { (_, err) in
                 if let _ = err {
-                    self.delegate?.didReceiveError(error: .javascriptEvaluationFailure)
+                    self.delegate?.didFailLoading(with: .javascriptEvaluationFailure)
                 }
             }
         }
@@ -87,7 +87,7 @@ class JSOperationLoader: NSObject, JSOperationLoaderProtocol {
     
     private func loadJavascriptContents() -> String {
         guard let url = URL(string: Constant.jsEndpoint) else {
-            self.delegate?.didReceiveError(error: .invalidUrl(urlString: Constant.jsEndpoint))
+            self.delegate?.didFailLoading(with: .invalidUrl(urlString: Constant.jsEndpoint))
             return ""
         }
         let contents = try? String(contentsOf: url)
@@ -96,7 +96,7 @@ class JSOperationLoader: NSObject, JSOperationLoaderProtocol {
     
     func handleReceivedMessage(message: String) {
         guard let data = message.data(using: .utf8) else {
-            self.delegate?.didReceiveError(error: .dataConversionFailure)
+            self.delegate?.didFailLoading(with: .dataConversionFailure)
             return
         }
         if let messageResponse = try? JSONDecoder().decode(ResponseMessage.self, from: data) {
@@ -106,7 +106,7 @@ class JSOperationLoader: NSObject, JSOperationLoaderProtocol {
             let responseSuccess = (id, progress, state)
             delegate?.didLoadJavascriptResponse(with: responseSuccess)
         } else {
-            self.delegate?.didReceiveError(error: .jsonDecodingError)
+            self.delegate?.didFailLoading(with: .jsonDecodingError)
         }
     }
 }
@@ -118,7 +118,7 @@ extension JSOperationLoader: WKNavigationDelegate {
         evaluateJavascript()
     }
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
-        delegate?.didReceiveError(error: .networkFailure)
+        delegate?.didFailLoading(with: .networkFailure)
     }
 }
 
@@ -129,7 +129,7 @@ extension JSOperationLoader: WKScriptMessageHandler {
         if let messageBody = message.body as? String {
             handleReceivedMessage(message: messageBody)
         } else {
-            delegate?.didReceiveError(error: .messageCastToStringFailure)
+            delegate?.didFailLoading(with: .messageCastToStringFailure)
         }
     }
 }
