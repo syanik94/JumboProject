@@ -17,6 +17,7 @@ _______________________
 - Send updates to ProgressDisplayViewController
 #### ResponseMessageViewModel
 - Created with a specific opaque unique ID
+- Used to configure tableView cells 
 #### JSOperationLoader
 - Responsible for loading the Javascript Operation
 - Evaluating Javascript and executing startOperation(id)
